@@ -4,10 +4,15 @@ using UnityEngine;
 using Unity.Entities;
 using Unity.Transforms;
 using Unity.Collections;
+using Unity.Rendering;
 
 public class spawner : MonoBehaviour
 {
     [SerializeField] private int totalEntities;
+
+    [SerializeField] private GameObject[] headPrefabs;
+    [SerializeField] private GameObject[] bodyPrefabs;
+    [SerializeField] private GameObject[] feetPrefabs;
 
     void Start()
     {
@@ -15,7 +20,9 @@ public class spawner : MonoBehaviour
 
         EntityArchetype entityArchetype = entityManager.CreateArchetype(
             typeof(AvatarData),
-            typeof(Translation)
+            typeof(Translation),
+            typeof(RenderMesh),
+            typeof(LocalToWorld)
         );
 
         NativeArray<Entity> entityArray = new NativeArray<Entity>(totalEntities, Allocator.Temp);
