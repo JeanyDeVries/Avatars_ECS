@@ -1,12 +1,13 @@
+﻿using Unity.Entities;
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Entities;
 using Unity.Transforms;
 using Unity.Collections;
 using Unity.Rendering;
 
-public class spawner : MonoBehaviour
+
+public class SpawnerEntities : MonoBehaviour
 {
     [SerializeField] private int totalEntities;
 
@@ -21,7 +22,7 @@ public class spawner : MonoBehaviour
         EntityArchetype entityArchetype = entityManager.CreateArchetype(
             typeof(AvatarData),
             typeof(Translation),
-            typeof(RenderMesh),
+            typeof(GameObject),
             typeof(LocalToWorld)
         );
 
@@ -33,9 +34,7 @@ public class spawner : MonoBehaviour
             Entity entity = entityArray[i];
             entityManager.SetComponentData(entity, new AvatarData
             {
-                head = Random.Range(0, 5),
-                body = Random.Range(0, 5),
-                feet = Random.Range(0, 5)
+                
             });
         }
 

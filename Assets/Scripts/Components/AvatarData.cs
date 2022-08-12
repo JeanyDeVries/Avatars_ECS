@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using Unity.Entities;
 
+[GenerateAuthoringComponent]
 public struct AvatarData : IComponentData
 {
-    public int head;
-    public int body;
-    public int feet;
+
+    public Entity prefabEntity;
 
 }
