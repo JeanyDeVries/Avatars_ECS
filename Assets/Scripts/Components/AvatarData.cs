@@ -5,6 +5,6 @@ using Unity.Entities;
 public struct AvatarData : IComponentData
 {
 
-    public Entity prefabEntity;
+    public Entity Prefab;
 
 }

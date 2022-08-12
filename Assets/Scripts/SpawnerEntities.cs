@@ -5,7 +5,8 @@ using UnityEngine;
 using Unity.Transforms;
 using Unity.Collections;
 using Unity.Rendering;
-
+using Unity.Mathematics;
+using Random = UnityEngine.Random;
 
 public class SpawnerEntities : MonoBehaviour
 {
@@ -17,12 +18,11 @@ public class SpawnerEntities : MonoBehaviour
 
     void Start()
     {
+
         EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
         EntityArchetype entityArchetype = entityManager.CreateArchetype(
             typeof(AvatarData),
-            typeof(Translation),
-            typeof(GameObject),
             typeof(LocalToWorld)
         );
 
@@ -35,6 +35,12 @@ public class SpawnerEntities : MonoBehaviour
             entityManager.SetComponentData(entity, new AvatarData
             {
                 
+            });
+            entityManager.SetComponentData(entity, new LocalToWorld
+            {
+                Value = new float4x4(
+                    rotation: quaternion.identity, 
+                    translation: new float3(Random.Range(-5, 5), Random.Range(-5, 5), Random.Range(-5, 5)))
             });
         }
 

@@ -222,6 +222,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 760275930}
+  - component: {fileID: 760275932}
   - component: {fileID: 760275931}
   m_Layer: 0
   m_Name: spawnerEntities
@@ -253,13 +254,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 760275929}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f987265453a07174fbf8076f7e7fc467, type: 3}
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalEntities: 100
-  headPrefabs: []
-  bodyPrefabs: []
-  feetPrefabs: []
+  ConversionMode: 0
+--- !u!114 &760275932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760275929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f1cb7ff95aae5149a7f772dd8691e4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  towerPrefabs:
+  - {fileID: 7048311605956129914, guid: bd057d63f8462994b9d99c469e62be7e, type: 3}
+  - {fileID: 5530942074572709750, guid: e2f2067cad2187e4a906683c06651f17, type: 3}
+  - {fileID: 3901762898726073714, guid: 129b468115d614c40b24f18b3500f39a, type: 3}
+  - {fileID: 7122950283714602910, guid: 021d8fba0d1c0aa4aaafd07f1d31a1b7, type: 3}
 --- !u!1 &1969825949
 GameObject:
   m_ObjectHideFlags: 0
