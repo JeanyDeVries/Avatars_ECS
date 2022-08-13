@@ -257,7 +257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConversionMode: 0
+  ConversionMode: 1
 --- !u!114 &760275932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,7 +270,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f1cb7ff95aae5149a7f772dd8691e4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towerPrefabs:
+  totalEntities: 100
+  avatarPrefabs:
   - {fileID: 7048311605956129914, guid: bd057d63f8462994b9d99c469e62be7e, type: 3}
   - {fileID: 5530942074572709750, guid: e2f2067cad2187e4a906683c06651f17, type: 3}
   - {fileID: 3901762898726073714, guid: 129b468115d614c40b24f18b3500f39a, type: 3}
