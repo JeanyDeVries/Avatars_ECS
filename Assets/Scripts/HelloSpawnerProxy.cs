@@ -27,34 +27,32 @@ public class HelloSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConv
         avatarEntitiesBodies = new Entity[totalEntities];
         avatarEntitiesFeet = new Entity[totalEntities];
 
-
         for (int i = 0; i < totalEntities; i++)
         {
-            int randomNumber = Random.Range(0, avatarPrefabsBodies.Length);
+            Entity bodyEntity = InstatiateEntity(dstManager, conversionSystem, avatarPrefabsBodies, avatarEntitiesBodies, i);
+            Entity headEntity = InstatiateEntity(dstManager, conversionSystem, avatarPrefabsHeads, avatarEntitiesHeads, i);
+            Entity feetEntity= InstatiateEntity(dstManager, conversionSystem, avatarPrefabsFeet, avatarEntitiesFeet, i);
 
-            Entity avatarBodyEntity = conversionSystem.GetPrimaryEntity(avatarPrefabsBodies[randomNumber]);
-            avatarEntitiesBodies[i] = avatarBodyEntity;
-            Entity spawnedBodyEntity = dstManager.Instantiate(avatarBodyEntity);
-            AddComponentData(dstManager, spawnedBodyEntity, true, 0f);
+            AddComponentData(dstManager, bodyEntity, true, 0f);
+            AddComponentData(dstManager, headEntity, false, 0.75f);
+            AddComponentData(dstManager, feetEntity, false, -0.9f);
 
-            randomNumber = Random.Range(0, avatarPrefabsHeads.Length);
-            Entity avatarHeadEntity = conversionSystem.GetPrimaryEntity(avatarPrefabsHeads[randomNumber]);
-            avatarEntitiesHeads[i] = avatarHeadEntity;
-            Entity spawnedHeadEntity = dstManager.Instantiate(avatarHeadEntity);
-            AddComponentData(dstManager, spawnedHeadEntity, false, 0.75f);
-
-            randomNumber = Random.Range(0, avatarPrefabsFeet.Length);
-            Entity avatarFeetEntity = conversionSystem.GetPrimaryEntity(avatarPrefabsFeet[randomNumber]);
-            avatarEntitiesFeet[i] = avatarFeetEntity;
-            Entity spawnedFeetEntity = dstManager.Instantiate(avatarFeetEntity);
-            AddComponentData(dstManager, spawnedFeetEntity, false, -0.9f);
-
-
-            dstManager.AddComponentData(spawnedHeadEntity, new Parent { Value = spawnedBodyEntity });
-            dstManager.AddComponentData(spawnedFeetEntity, new Parent { Value = spawnedBodyEntity });
-            dstManager.AddComponentData(spawnedHeadEntity, new LocalToParent());
-            dstManager.AddComponentData(spawnedFeetEntity, new LocalToParent());
+            dstManager.AddComponentData(headEntity, new Parent { Value = bodyEntity });
+            dstManager.AddComponentData(feetEntity, new Parent { Value = bodyEntity });
+            dstManager.AddComponentData(headEntity, new LocalToParent());
+            dstManager.AddComponentData(feetEntity, new LocalToParent());
         }
+    }
+
+    public Entity InstatiateEntity(EntityManager dstManager, GameObjectConversionSystem conversionSystem,  GameObject[] prefabs, Entity[] entities, int i)
+    {
+        int randomNumber = Random.Range(0, prefabs.Length);
+
+        Entity avatarEntity = conversionSystem.GetPrimaryEntity(prefabs[randomNumber]);
+        entities[i] = avatarEntity;
+        Entity spawnedEntity = dstManager.Instantiate(avatarEntity);
+
+        return spawnedEntity;
     }
 
     public void AddComponentData(EntityManager dstManager, Entity entity, bool isBody, float height)
