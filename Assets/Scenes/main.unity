@@ -271,11 +271,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   totalEntities: 100
-  avatarPrefabs:
+  avatarPrefabsHeads:
+  - {fileID: 4046833371917771422, guid: 972f94293bdee51468e82b0d732f71ea, type: 3}
+  - {fileID: 2415752254359712793, guid: 717ba738a09e1e94fbd7c32d61c544d7, type: 3}
+  - {fileID: 7692930541862745432, guid: 653d7ec09d487d24b83002530302cd17, type: 3}
+  - {fileID: 4035465886137894738, guid: 91b5e34fbf670c84da17c945ff6fa32c, type: 3}
+  avatarPrefabsBodies:
   - {fileID: 7048311605956129914, guid: bd057d63f8462994b9d99c469e62be7e, type: 3}
   - {fileID: 5530942074572709750, guid: e2f2067cad2187e4a906683c06651f17, type: 3}
   - {fileID: 3901762898726073714, guid: 129b468115d614c40b24f18b3500f39a, type: 3}
   - {fileID: 7122950283714602910, guid: 021d8fba0d1c0aa4aaafd07f1d31a1b7, type: 3}
+  avatarPrefabsFeet:
+  - {fileID: 4415720533061399432, guid: 0fe68c70f7dfb3041825f5c56fd5b8a1, type: 3}
+  - {fileID: 6632048217700732178, guid: 0ce336ad00c658c4982e17f1ed0419a2, type: 3}
+  - {fileID: 5079707307387467960, guid: 0451df68033f3ad4ebca7e6397cbdc18, type: 3}
+  - {fileID: 1626418103545267202, guid: 1958b9b576ebfa84f8538add9c316a4f, type: 3}
 --- !u!1 &1969825949
 GameObject:
   m_ObjectHideFlags: 0
