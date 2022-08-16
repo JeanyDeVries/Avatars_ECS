@@ -35,21 +35,29 @@ public class HelloSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConv
             Entity avatarBodyEntity = conversionSystem.GetPrimaryEntity(avatarPrefabsBodies[randomNumber]);
             avatarEntitiesBodies[i] = avatarBodyEntity;
             Entity spawnedBodyEntity = dstManager.Instantiate(avatarBodyEntity);
-            AddComponentData(dstManager, spawnedBodyEntity);
+            AddComponentData(dstManager, spawnedBodyEntity, true, 0f);
 
+            randomNumber = Random.Range(0, avatarPrefabsHeads.Length);
             Entity avatarHeadEntity = conversionSystem.GetPrimaryEntity(avatarPrefabsHeads[randomNumber]);
             avatarEntitiesHeads[i] = avatarHeadEntity;
             Entity spawnedHeadEntity = dstManager.Instantiate(avatarHeadEntity);
-            AddComponentData(dstManager, spawnedHeadEntity);
+            AddComponentData(dstManager, spawnedHeadEntity, false, 0.75f);
 
+            randomNumber = Random.Range(0, avatarPrefabsFeet.Length);
             Entity avatarFeetEntity = conversionSystem.GetPrimaryEntity(avatarPrefabsFeet[randomNumber]);
             avatarEntitiesFeet[i] = avatarFeetEntity;
             Entity spawnedFeetEntity = dstManager.Instantiate(avatarFeetEntity);
-            AddComponentData(dstManager, spawnedFeetEntity);
+            AddComponentData(dstManager, spawnedFeetEntity, false, -0.9f);
+
+
+            dstManager.AddComponentData(spawnedHeadEntity, new Parent { Value = spawnedBodyEntity });
+            dstManager.AddComponentData(spawnedFeetEntity, new Parent { Value = spawnedBodyEntity });
+            dstManager.AddComponentData(spawnedHeadEntity, new LocalToParent());
+            dstManager.AddComponentData(spawnedFeetEntity, new LocalToParent());
         }
     }
 
-    public void AddComponentData(EntityManager dstManager, Entity entity)
+    public void AddComponentData(EntityManager dstManager, Entity entity, bool isBody, float height)
     {
         dstManager.AddComponent(entity, typeof(AvatarData));
         dstManager.AddComponent(entity, typeof(Translation));
@@ -58,17 +66,28 @@ public class HelloSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConv
         {
 
         });
-        dstManager.SetComponentData(entity, new Translation
-        {
-            Value = new float3(
-                Random.Range(0, 100), 0, Random.Range(0, 100))
-        });
         dstManager.SetComponentData(entity, new LocalToWorld
         {
             Value = new float4x4(
                 rotation: quaternion.identity,
                 translation: new float3(0, 0, 0))
         });
+        if(isBody)
+        {
+            dstManager.SetComponentData(entity, new Translation
+            {
+                Value = new float3(
+                    Random.Range(0, 100), height, Random.Range(0, 100))
+            });
+        }
+        else
+        {
+            dstManager.SetComponentData(entity, new Translation
+            {
+                Value = new float3(
+                    Random.Range(0, 0), height, Random.Range(0, 0))
+            });
+        }
     }
 
     public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs)
