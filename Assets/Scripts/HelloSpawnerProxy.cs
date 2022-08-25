@@ -60,10 +60,6 @@ public class HelloSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConv
         dstManager.AddComponent(entity, typeof(AvatarData));
         dstManager.AddComponent(entity, typeof(Translation));
         dstManager.AddComponent(entity, typeof(LocalToWorld));
-        dstManager.SetComponentData(entity, new AvatarData
-        {
-
-        });
         dstManager.SetComponentData(entity, new LocalToWorld
         {
             Value = new float4x4(
@@ -77,6 +73,10 @@ public class HelloSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConv
                 Value = new float3(
                     Random.Range(0, 100), height, Random.Range(0, 100))
             });
+            dstManager.SetComponentData(entity, new AvatarData
+            {
+                movingSpeed = Random.Range(1, 5)
+            });
         }
         else
         {
@@ -84,6 +84,10 @@ public class HelloSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConv
             {
                 Value = new float3(
                     Random.Range(0, 0), height, Random.Range(0, 0))
+            });
+            dstManager.SetComponentData(entity, new AvatarData
+            {
+                movingSpeed = 0
             });
         }
     }
