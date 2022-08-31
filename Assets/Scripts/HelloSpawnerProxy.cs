@@ -68,26 +68,23 @@ public class HelloSpawnerProxy : MonoBehaviour, IDeclareReferencedPrefabs, IConv
         });
         if(isBody)
         {
+            dstManager.AddComponent(entity, typeof(AABB));
+
+            float3 position = new float3(
+                    Random.Range(0, 100), height, Random.Range(0, 100));
+
             dstManager.SetComponentData(entity, new Translation
             {
-                Value = new float3(
-                    Random.Range(0, 100), height, Random.Range(0, 100))
+                Value = position
             });
             dstManager.SetComponentData(entity, new AvatarData
             {
                 movingSpeed = Random.Range(1, 5)
             });
-        }
-        else
-        {
-            dstManager.SetComponentData(entity, new Translation
+            dstManager.SetComponentData(entity, new AABB
             {
-                Value = new float3(
-                    Random.Range(0, 0), height, Random.Range(0, 0))
-            });
-            dstManager.SetComponentData(entity, new AvatarData
-            {
-                movingSpeed = 0
+                max = position + 0.5f,
+                min = position - 0.5f,
             });
         }
     }
