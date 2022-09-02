@@ -34,7 +34,7 @@ public class SpawnerEntities : MonoBehaviour, IDeclareReferencedPrefabs, IConver
         {
             Entity bodyEntity = InstatiateEntity(dstManager, conversionSystem, avatarPrefabsBodies, avatarEntitiesBodies, i);
             Entity headEntity = InstatiateEntity(dstManager, conversionSystem, avatarPrefabsHeads, avatarEntitiesHeads, i);
-            Entity feetEntity= InstatiateEntity(dstManager, conversionSystem, avatarPrefabsFeet, avatarEntitiesFeet, i);
+            Entity feetEntity = InstatiateEntity(dstManager, conversionSystem, avatarPrefabsFeet, avatarEntitiesFeet, i);
 
             AddComponentData(dstManager, bodyEntity, true, 0f);
             AddComponentData(dstManager, headEntity, false, 0.75f);
@@ -47,7 +47,7 @@ public class SpawnerEntities : MonoBehaviour, IDeclareReferencedPrefabs, IConver
         }
     }
 
-    public Entity InstatiateEntity(EntityManager dstManager, GameObjectConversionSystem conversionSystem,  GameObject[] prefabs, Entity[] entities, int i)
+    public Entity InstatiateEntity(EntityManager dstManager, GameObjectConversionSystem conversionSystem, GameObject[] prefabs, Entity[] entities, int i)
     {
         int randomNumber = Random.Range(0, prefabs.Length);
 
@@ -71,26 +71,23 @@ public class SpawnerEntities : MonoBehaviour, IDeclareReferencedPrefabs, IConver
         });
         if(isBody)
         {
+            dstManager.AddComponent(entity, typeof(AABB));
+
+            float3 position = new float3(
+                    Random.Range(0, 100), height, Random.Range(0, 100));
+
             dstManager.SetComponentData(entity, new Translation
             {
-                Value = new float3(
-                    Random.Range(0, 100), height, Random.Range(0, 100))
+                Value = position
             });
             dstManager.SetComponentData(entity, new AvatarData
             {
                 movingSpeed = Random.Range(1, 5)
             });
-        }
-        else
-        {
-            dstManager.SetComponentData(entity, new Translation
+            dstManager.SetComponentData(entity, new AABB
             {
-                Value = new float3(
-                    Random.Range(0, 0), height, Random.Range(0, 0))
-            });
-            dstManager.SetComponentData(entity, new AvatarData
-            {
-                movingSpeed = 0
+                max = position + 0.5f,
+                min = position - 0.5f,
             });
         }
     }
