@@ -267,10 +267,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 760275929}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f1cb7ff95aae5149a7f772dd8691e4f, type: 3}
+  m_Script: {fileID: 11500000, guid: 98243e740ca5dc747952080e5121b395, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalEntities: 3
+  totalEntities: 100
   avatarPrefabsHeads:
   - {fileID: 4046833371917771422, guid: 972f94293bdee51468e82b0d732f71ea, type: 3}
   - {fileID: 2415752254359712793, guid: 717ba738a09e1e94fbd7c32d61c544d7, type: 3}

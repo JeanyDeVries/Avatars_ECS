@@ -1,49 +1,115 @@
-﻿using Unity.Entities;
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using Unity.Transforms;
 using Unity.Collections;
-using Unity.Rendering;
+using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Transforms;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class SpawnerEntities : MonoBehaviour
+[RequiresEntityConversion]
+public class SpawnerEntities : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObjectToEntity
 {
+    #region REFERENCES
     [SerializeField] private int totalEntities;
 
-    [SerializeField] private GameObject[] headPrefabs;
-    [SerializeField] private GameObject[] bodyPrefabs;
-    [SerializeField] private GameObject[] feetPrefabs;
+    public static Entity[] avatarEntitiesHeads;
 
-    void Start()
+    public GameObject[] avatarPrefabsHeads;
+
+    public static Entity[] avatarEntitiesBodies;
+    public GameObject[] avatarPrefabsBodies;
+
+    public static Entity[] avatarEntitiesFeet;
+    public GameObject[] avatarPrefabsFeet;
+    #endregion
+
+    public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
+        avatarEntitiesHeads = new Entity[totalEntities];
+        avatarEntitiesBodies = new Entity[totalEntities];
+        avatarEntitiesFeet = new Entity[totalEntities];
 
-        EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-
-        EntityArchetype entityArchetype = entityManager.CreateArchetype(
-            typeof(AvatarData),
-            typeof(LocalToWorld)
-        );
-
-        NativeArray<Entity> entityArray = new NativeArray<Entity>(totalEntities, Allocator.Temp);
-        entityManager.CreateEntity(entityArchetype, entityArray);
-
-        for (int i = 0; i < entityArray.Length; i++)
+        for (int i = 0; i < totalEntities; i++)
         {
-            Entity entity = entityArray[i];
-            entityManager.SetComponentData(entity, new AvatarData
+            Entity bodyEntity = InstatiateEntity(dstManager, conversionSystem, avatarPrefabsBodies, avatarEntitiesBodies, i);
+            Entity headEntity = InstatiateEntity(dstManager, conversionSystem, avatarPrefabsHeads, avatarEntitiesHeads, i);
+            Entity feetEntity= InstatiateEntity(dstManager, conversionSystem, avatarPrefabsFeet, avatarEntitiesFeet, i);
+
+            AddComponentData(dstManager, bodyEntity, true, 0f);
+            AddComponentData(dstManager, headEntity, false, 0.75f);
+            AddComponentData(dstManager, feetEntity, false, -0.9f);
+
+            dstManager.AddComponentData(headEntity, new Parent { Value = bodyEntity });
+            dstManager.AddComponentData(feetEntity, new Parent { Value = bodyEntity });
+            dstManager.AddComponentData(headEntity, new LocalToParent());
+            dstManager.AddComponentData(feetEntity, new LocalToParent());
+        }
+    }
+
+    public Entity InstatiateEntity(EntityManager dstManager, GameObjectConversionSystem conversionSystem,  GameObject[] prefabs, Entity[] entities, int i)
+    {
+        int randomNumber = Random.Range(0, prefabs.Length);
+
+        Entity avatarEntity = conversionSystem.GetPrimaryEntity(prefabs[randomNumber]);
+        entities[i] = avatarEntity;
+        Entity spawnedEntity = dstManager.Instantiate(avatarEntity);
+
+        return spawnedEntity;
+    }
+
+    public void AddComponentData(EntityManager dstManager, Entity entity, bool isBody, float height)
+    {
+        dstManager.AddComponent(entity, typeof(AvatarData));
+        dstManager.AddComponent(entity, typeof(Translation));
+        dstManager.AddComponent(entity, typeof(LocalToWorld));
+        dstManager.SetComponentData(entity, new LocalToWorld
+        {
+            Value = new float4x4(
+                rotation: quaternion.identity,
+                translation: new float3(0, 0, 0))
+        });
+        if(isBody)
+        {
+            dstManager.SetComponentData(entity, new Translation
             {
-                
+                Value = new float3(
+                    Random.Range(0, 100), height, Random.Range(0, 100))
             });
-            entityManager.SetComponentData(entity, new LocalToWorld
+            dstManager.SetComponentData(entity, new AvatarData
             {
-                Value = new float4x4(
-                    rotation: quaternion.identity, 
-                    translation: new float3(Random.Range(-5, 5), Random.Range(-5, 5), Random.Range(-5, 5)))
+                movingSpeed = Random.Range(1, 5)
             });
         }
+        else
+        {
+            dstManager.SetComponentData(entity, new Translation
+            {
+                Value = new float3(
+                    Random.Range(0, 0), height, Random.Range(0, 0))
+            });
+            dstManager.SetComponentData(entity, new AvatarData
+            {
+                movingSpeed = 0
+            });
+        }
+    }
 
-        entityArray.Dispose();
+    public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs)
+    {
+        for (int i = 0; i < avatarPrefabsBodies.Length; i++)
+        {
+            referencedPrefabs.Add(avatarPrefabsBodies[i]);
+        }
+
+        for (int i = 0; i < avatarPrefabsHeads.Length; i++)
+        {
+            referencedPrefabs.Add(avatarPrefabsHeads[i]);
+        }
+
+        for (int i = 0; i < avatarPrefabsFeet.Length; i++)
+        {
+            referencedPrefabs.Add(avatarPrefabsFeet[i]);
+        }
     }
 }
